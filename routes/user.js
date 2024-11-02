@@ -29,16 +29,20 @@ router.post("/register", async (req, res) => {
 
 router.get(("/"), async(req, res)=>{
     try{
-    const users = await User.find().select("-password -_id");
+    const users = await User.find().select("-password");
     res.status(200).json(users);
     }catch(error){
         console.log(error);
         res.status(500).json({message: "Internal server error"});
     }
 })
-router.get(("/:id"), async(req, res)=>{
+router.get(("/byid/:id"), async(req, res)=>{
+    const {id} = req.params; 
     try{
-    const users = await User.findOne().select("-password -_id");
+        if(!id){
+            res.status(401).json({message: "User does not exist"})
+        }
+    const users = await User.findById(id);
     res.status(200).json(users);
     }catch(error){
         console.log(error);

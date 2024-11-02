@@ -37,16 +37,25 @@ router.post("/create/:boardId", authMiddleware, async (req, res) => {
             return res.status(400).json({ message: "Invalid due date format" });
         }
 
-        
+          try{
                 checklist = JSON.parse(checklist);
                 assignedTo = JSON.parse(assignedTo);
+                if (!Array.isArray(assignedTo) || !assignedTo.every(id => id.trim())) {
+                    assignedTo = []; 
+                }
                 console.log(checklist, assignedTo);
+          }catch(e){
+            return res.status(400).json({ message: "Invalid JSON format to checklist or assignedTo" });
+          }
          
 
         const formattedChecklist = checklist.map(item =>({
-            item: item,
-            checked: false
+            item: item.item,
+            checked: item.checked
         }));
+        if (!["low", "moderate", "high"].includes(priority)) {
+            return res.status(400).json({ message: "Invalid priority value" });
+        }
         
         const status = 'todo'; 
 
@@ -247,7 +256,7 @@ router.delete("/deleteall/:boardId", authMiddleware, async (req, res) =>{
     }
     });
 
-        
+   
 
     
 

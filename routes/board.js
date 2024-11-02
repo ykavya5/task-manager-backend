@@ -58,7 +58,7 @@ router.post("/", authMiddleware, async(req, res)=>{
 
 });
 
-router.post("/add-members/:id", authMiddleware, async(req, res)=>{
+router.post("/addMembers/:id", authMiddleware, async(req, res)=>{
     try{
         const { user } = req;
         const {id} = req.params;
